@@ -1,0 +1,267 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ──────────────────────────────────────────────────────────────
+   EduQuest design tokens
+   Dark-first palette: deep navy surfaces, a yellow→orange accent
+   ramp for progress and rewards, and purple reserved for AI.
+   ────────────────────────────────────────────────────────────── */
+@theme {
+  --color-ink-950: #080b12;
+  --color-ink-900: #0d1220;
+  --color-ink-850: #111827;
+  --color-ink-800: #141b2b;
+  --color-ink-750: #192235;
+  --color-ink-700: #1f2a40;
+  --color-line: #242d40;
+  --color-line-strong: #33405a;
+
+  --color-sun-50: #fff8d6;
+  --color-sun-100: #fff2b3;
+  --color-sun-200: #ffe680;
+  --color-sun-300: #ffd34d;
+  --color-amber: #ffb347;
+  --color-ember: #ff8a3d;
+  --color-ember-deep: #e86b25;
+
+  --color-iris-200: #c9c1ff;
+  --color-iris-300: #b3a8ff;
+  --color-iris-400: #9b8cff;
+  --color-iris-600: #7058d8;
+
+  --color-mint: #7fe0b5;
+  --color-sky: #8cc8ff;
+  --color-rose: #ff8f8f;
+
+  --color-fg: #f5f6fa;
+  --color-fg-2: #a3adbf;
+  --color-fg-3: #707c91;
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), var(--font-body), ui-sans-serif, sans-serif;
+
+  --radius-xl2: 1.25rem;
+  --radius-card: 1.75rem;
+
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.03) inset, 0 18px 40px -24px rgb(0 0 0 / 0.7);
+  --shadow-glow-sun: 0 0 0 1px rgb(255 211 77 / 0.25), 0 10px 40px -12px rgb(255 211 77 / 0.35);
+  --shadow-glow-iris: 0 0 0 1px rgb(155 140 255 / 0.25), 0 10px 40px -12px rgb(155 140 255 / 0.35);
+
+  /* Motion (emilkowalski/skills): ease-out for enter/exit, never ease-in; UI under 300ms. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --animate-fade-up: fade-up 0.3s cubic-bezier(0.23, 1, 0.32, 1) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-pop: pop 0.25s cubic-bezier(0.23, 1, 0.32, 1) both;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    from { background-position: -400px 0; }
+    to { background-position: 400px 0; }
+  }
+  @keyframes pop {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+}
+
+:root {
+  color-scheme: dark;
+  /* shadcn/ui tokens mapped onto the EduQuest palette (the app is dark-only). */
+  --background: #080b12;
+  --foreground: #f5f6fa;
+  --card: #141b2b;
+  --card-foreground: #f5f6fa;
+  --popover: #141b2b;
+  --popover-foreground: #f5f6fa;
+  --primary: #ffd34d;
+  --primary-foreground: #080b12;
+  --secondary: #1f2a40;
+  --secondary-foreground: #f5f6fa;
+  --muted: #192235;
+  --muted-foreground: #a3adbf;
+  --accent: #1f2a40;
+  --accent-foreground: #f5f6fa;
+  --destructive: #ff8f8f;
+  --border: #242d40;
+  --input: #33405a;
+  --ring: #ffd34d;
+  --chart-1: #ffd34d;
+  --chart-2: #9b8cff;
+  --chart-3: #7fe0b5;
+  --chart-4: #ff8a3d;
+  --chart-5: #8cc8ff;
+  --radius: 1rem;
+  --sidebar: #0d1220;
+  --sidebar-foreground: #f5f6fa;
+  --sidebar-primary: #ffe680;
+  --sidebar-primary-foreground: #080b12;
+  --sidebar-accent: #1f2a40;
+  --sidebar-accent-foreground: #f5f6fa;
+  --sidebar-border: #242d40;
+  --sidebar-ring: #ffd34d;
+}
+
+html {
+  background: var(--color-ink-950);
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgb(112 88 216 / 0.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgb(255 211 77 / 0.06), transparent 60%),
+    var(--color-ink-950);
+  background-attachment: fixed;
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Phones: no grey tap flash, no double-tap zoom delay on controls. */
+html { -webkit-tap-highlight-color: transparent; }
+a, button, [role="button"], label, summary { touch-action: manipulation; }
+
+::selection {
+  background: rgb(255 211 77 / 0.35);
+  color: #fff;
+}
+
+/* Visible, consistent focus ring for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--color-sun-300);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Translucent hairline border reads cleaner than a solid one on dark surfaces. */
+.surface {
+  background: linear-gradient(180deg, rgb(25 34 53 / 0.85), rgb(20 27 43 / 0.92));
+  border: 1px solid rgb(255 255 255 / 0.07);
+  box-shadow: var(--shadow-card);
+}
+
+.surface-flat {
+  background: var(--color-ink-800);
+  border: 1px solid var(--color-line);
+}
+
+.grad-sun {
+  background: linear-gradient(135deg, var(--color-sun-100), var(--color-sun-300));
+}
+.grad-ember {
+  background: linear-gradient(135deg, var(--color-sun-300), var(--color-ember));
+}
+.grad-iris {
+  background: linear-gradient(135deg, var(--color-iris-400), var(--color-iris-600));
+}
+.text-grad-sun {
+  background: linear-gradient(90deg, var(--color-sun-100), var(--color-sun-300) 45%, var(--color-ember));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-ink-800) 0px, var(--color-ink-700) 80px, var(--color-ink-800) 160px);
+  background-size: 800px 100%;
+  animation: var(--animate-shimmer);
+}
+
+/* Subtle dotted grid used on hero and empty states. */
+.grid-dots {
+  background-image: radial-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Flashcard flip */
+.flip-scene { perspective: 1400px; }
+.flip-card {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.flip-card[data-flipped="true"] { transform: rotateY(180deg); }
+.flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flip-back { transform: rotateY(180deg); }
+
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* Reduced motion means gentler, not none: keep opacity fades, drop movement and scaling. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-property: opacity, color, background-color, border-color !important;
+  }
+  .animate-fade-up, .animate-pop { animation-name: fade-in !important; }
+}
+@keyframes fade-in { from { opacity: 0; } }
+
+/* Irbis blinks briefly every few seconds. */
+@keyframes eq-blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(0.1); } }
+
+/* Base UI: keep app content in its own stacking context so portalled popups always sit on top. */
+.app-root { isolation: isolate; }
+
+@theme inline {
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+}
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled), [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  html {
+    @apply font-sans;
+  }
+}

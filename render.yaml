@@ -1,0 +1,34 @@
+# Render Blueprint: New → Blueprint → pick this repository.
+# The database is a file on a persistent disk at /data, so grades, XP, chats,
+# passports and certificates survive restarts and redeploys.
+# Persistent disks need a paid instance type (see render.com/pricing).
+services:
+  - type: web
+    name: eduquest
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/health
+    disk:
+      name: eduquest-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: EDUQUEST_DATA_DIR
+        value: /data
+      # Hide "Reset demo data" so visitors can't wipe the saved data.
+      - key: ALLOW_DEMO_RESET
+        value: "off"
+      # Signs logins and the school seal on passports/letters. Never change it
+      # after launch, or existing sealed documents will show as "not valid".
+      - key: SESSION_SECRET
+        generateValue: true
+      # Cloud AI key (Groq by default). Render asks for the value on setup.
+      - key: AI_API_KEY
+        sync: false
+      # Optional backup AI, e.g. Gemini's OpenAI-compatible endpoint:
+      # - key: AI_FALLBACK_API_KEY
+      #   sync: false
+      # - key: AI_FALLBACK_BASE_URL
+      #   value: https://generativelanguage.googleapis.com/v1beta/openai
+      # - key: AI_FALLBACK_MODEL
+      #   value: <a Gemini Flash model id from AI Studio>
